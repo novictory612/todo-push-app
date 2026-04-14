@@ -2,8 +2,6 @@ import webpush from 'web-push';
 import { db } from './db';
 import { initDb } from './init-db';
 
-initDb();
-
 webpush.setVapidDetails(
   process.env.VAPID_SUBJECT || 'mailto:test@example.com',
   process.env.VAPID_PUBLIC_KEY || '',
@@ -15,6 +13,8 @@ export function getPublicVapidKey() {
 }
 
 export function getAllSubscriptions() {
+  initDb();
+
   const stmt = db.prepare(`
     SELECT id, endpoint, p256dh, auth, created_at as createdAt
     FROM push_subscriptions
@@ -24,6 +24,8 @@ export function getAllSubscriptions() {
 }
 
 export async function sendPushToAll(title: string, body: string, url = '/') {
+  initDb();
+
   const subs = getAllSubscriptions() as Array<{
     id: number;
     endpoint: string;

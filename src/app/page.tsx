@@ -6,9 +6,11 @@ import PushPermission from '@/components/PushPermission';
 import { db } from '@/lib/db';
 import { initDb } from '@/lib/init-db';
 
-initDb();
+export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
+  initDb();
+
   const user = await getAuthUser();
   if (!user) {
     redirect('/login');

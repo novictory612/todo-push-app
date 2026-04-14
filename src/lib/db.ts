@@ -9,5 +9,3 @@ if (!fs.existsSync(dbPath)) {
 
 const sqliteFile = path.join(dbPath, 'app.db');
 export const db = new Database(sqliteFile);
-
-db.pragma('journal_mode = WAL');

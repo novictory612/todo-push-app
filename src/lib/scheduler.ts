@@ -1,9 +1,7 @@
 import { db } from './db';
 import { initDb } from './init-db';
-import { addMinutes, formatDateKey, formatTimeHHmm, getNowKST } from './time';
+import { formatDateKey, formatTimeHHmm, getNowKST } from './time';
 import { sendPushToAll } from './push';
-
-initDb();
 
 let schedulerStarted = false;
 
@@ -23,6 +21,8 @@ function insertLog(taskId: number, dateKey: string, stage: 'initial' | 'reminder
 }
 
 function getTasks() {
+  initDb();
+
   return db.prepare(`
     SELECT id, title, notify_time as notifyTime, completed, created_at as createdAt, updated_at as updatedAt
     FROM tasks
@@ -36,6 +36,8 @@ function getTasks() {
 }
 
 async function checkNotifications() {
+  initDb();
+
   const now = getNowKST();
   const dateKey = formatDateKey(now);
   const currentHHmm = formatTimeHHmm(now);
