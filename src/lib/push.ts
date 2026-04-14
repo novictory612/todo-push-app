@@ -2,11 +2,22 @@ import webpush from 'web-push';
 import { db } from './db';
 import { initDb } from './init-db';
 
-webpush.setVapidDetails(
-  process.env.VAPID_SUBJECT || 'mailto:test@example.com',
-  process.env.VAPID_PUBLIC_KEY || '',
-  process.env.VAPID_PRIVATE_KEY || ''
-);
+let vapidConfigured = false;
+
+function ensureVapidConfigured() {
+  if (vapidConfigured) return;
+
+  const publicKey = process.env.VAPID_PUBLIC_KEY;
+  const privateKey = process.env.VAPID_PRIVATE_KEY;
+  const subject = process.env.VAPID_SUBJECT || 'mailto:test@example.com';
+
+  if (!publicKey || !privateKey) {
+    throw new Error('VAPID keys are missing');
+  }
+
+  webpush.setVapidDetails(subject, publicKey, privateKey);
+  vapidConfigured = true;
+}
 
 export function getPublicVapidKey() {
   return process.env.VAPID_PUBLIC_KEY || '';
@@ -25,6 +36,7 @@ export function getAllSubscriptions() {
 
 export async function sendPushToAll(title: string, body: string, url = '/') {
   initDb();
+  ensureVapidConfigured();
 
   const subs = getAllSubscriptions() as Array<{
     id: number;
