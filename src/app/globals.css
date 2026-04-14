@@ -25,6 +25,8 @@ input {
   max-width: 480px;
   margin: 0 auto;
   padding: 20px;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .card {
@@ -33,6 +35,8 @@ input {
   padding: 16px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   margin-bottom: 16px;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .title {
@@ -44,10 +48,20 @@ input {
 .input,
 .time-input {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  display: block;
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 10px;
   margin-bottom: 10px;
+  background: white;
+}
+
+.time-input {
+  -webkit-appearance: none;
+  appearance: none;
+  overflow: hidden;
 }
 
 .btn {
